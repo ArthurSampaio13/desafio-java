@@ -11,5 +11,5 @@ public interface UserService {
     UUID createUser(String name, String email);
     UserDTO getUserByID(UUID userId);
     void deleteUserByID(UUID userId);
-    
+    void updateUserByID(UUID userId, String name, String email);
 }

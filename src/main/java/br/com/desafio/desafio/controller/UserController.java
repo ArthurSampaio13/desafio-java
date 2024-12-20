@@ -62,4 +62,15 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUserByID(
+        @PathVariable UUID userId, 
+        @RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO
+    ) {
+        this.userService.updateUserByID(userId, 
+        updateUserRequestDTO.name(), 
+        updateUserRequestDTO.email()
+        );
+        return ResponseEntity.noContent().build();
+    }
 }

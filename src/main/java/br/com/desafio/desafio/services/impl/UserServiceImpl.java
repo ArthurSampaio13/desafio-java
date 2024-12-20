@@ -52,5 +52,15 @@ public class UserServiceImpl implements UserService {
     public void deleteUserByID(UUID userId) {
         this.userRepository.deleteById(userId);
     }
+
+    @Override
+    public void updateUserByID(UUID userId, String name, String email) {
+        var user = this.userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException());
+        user.setName(name);
+        user.setEmail(email);
+
+        this.userRepository.save(user);
+    }
     
 }
