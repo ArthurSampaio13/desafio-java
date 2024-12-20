@@ -83,6 +83,16 @@ public class UserControllerTest {
         .deleteUserByID(uuid);
     }
 
-    
+    @Test
+    void itShouldUpdateUserById() {
+        // Given
+        var uuid = UUID.randomUUID();
+        var request = new UpdateUserRequestDTO("John Doe", "john.doe@gmail.com");
+        // When
+        this.userController.updateUserByID(uuid, request);
+        // Then
+        verify(this.userService, times(1))
+        .updateUserByID(uuid, request.name(), request.email());
+    }
         
 }
