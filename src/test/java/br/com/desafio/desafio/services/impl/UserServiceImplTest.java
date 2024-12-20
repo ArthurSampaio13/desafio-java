@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.desafio.desafio.domain.User;
 import br.com.desafio.desafio.repository.UserRepository;
 import br.com.desafio.desafio.services.exceptions.EmailAlreadyExistsException;
+import br.com.desafio.desafio.services.exceptions.UserNotFoundException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceImplTest {
@@ -77,5 +79,46 @@ public class UserServiceImplTest {
         
         verify(this.userRepository, times(0))
         .save(any());
+    }
+
+    @Test
+    void itShoulReturnAnUserDTOIfUserExists() {
+        // Given
+        var uuid = UUID.randomUUID();
+        var user = User.builder()
+                .id(uuid)
+                .name("John Doe")
+                .email("john.doe@gmail.com")
+                .build();
+
+        when(this.userRepository.findById(any()))
+        .thenReturn(Optional.of(user));
+
+        // When 
+        var userDTO = this.userServiceImpl.getUserByID(uuid);
+        
+        // Then
+        assertEquals(uuid, userDTO.id());
+        assertEquals(user.getName(), userDTO.name());
+        assertEquals(user.getEmail(), userDTO.email());
+        verify(this.userRepository, times(1))
+        .findById(uuid);
+    }
+
+    @Test
+    void itShouldThrowAnErrorIfUserDoesNotExists() {
+        // Given
+        var uuid = UUID.randomUUID();
+
+        when(this.userRepository.findById(any()))
+        .thenReturn(Optional.empty());
+
+        // When & Then	
+        assertThrows(UserNotFoundException.class, () -> {
+            this.userServiceImpl.getUserByID(uuid);
+        });
+
+        verify(this.userRepository, times(1))
+        .findById(uuid);
     }
 }
