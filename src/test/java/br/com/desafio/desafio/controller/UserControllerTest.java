@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.desafio.desafio.controller.dto.CreateUserRequestDTO;
+import br.com.desafio.desafio.controller.dto.UpdateUserRequestDTO;
 import br.com.desafio.desafio.controller.dto.UserDTO;
 import br.com.desafio.desafio.services.UserService;
 
@@ -68,4 +69,20 @@ public class UserControllerTest {
         assertEquals(body.name(), userDTO.name());
         assertEquals(body.email(), userDTO.email());
     }
+
+    @Test
+    void itShouldDeleteUserById() {
+        // Given
+        var uuid = UUID.randomUUID();
+        
+        // When
+        this.userController.deleteUserByID(uuid);
+        
+        // Then
+        verify(this.userService, times(1))
+        .deleteUserByID(uuid);
+    }
+
+    
+        
 }
