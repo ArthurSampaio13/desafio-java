@@ -121,4 +121,17 @@ public class UserServiceImplTest {
         verify(this.userRepository, times(1))
         .findById(uuid);
     }
+
+    @Test
+    void itShouldDeleteUserById() {
+        // Given
+        var uuid = UUID.randomUUID();
+        
+        // When
+        this.userServiceImpl.deleteUserByID(uuid);
+        
+        // Then
+        verify(this.userRepository, times(1))
+        .deleteById(uuid);
+    }
 }

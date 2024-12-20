@@ -10,4 +10,6 @@ import br.com.desafio.desafio.controller.dto.UserDTO;
 public interface UserService {
     UUID createUser(String name, String email);
     UserDTO getUserByID(UUID userId);
+    void deleteUserByID(UUID userId);
+    
 }
