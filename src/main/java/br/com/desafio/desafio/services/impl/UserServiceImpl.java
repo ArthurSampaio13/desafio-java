@@ -1,9 +1,12 @@
 package br.com.desafio.desafio.services.impl;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import br.com.desafio.desafio.controller.dto.UniqueDigitDTO;
 import br.com.desafio.desafio.controller.dto.UserDTO;
 import br.com.desafio.desafio.domain.User;
 import br.com.desafio.desafio.repository.UserRepository;
@@ -61,6 +64,23 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
 
         this.userRepository.save(user);
+    }
+
+    @Override
+    public List<UniqueDigitDTO> getCalculationsByUserId(UUID userId) {
+        var user = this.userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException());
+
+        return user.getUniqueDigits()
+        .stream()
+        .map(uniqueDigit -> {
+            return new UniqueDigitDTO(
+                uniqueDigit.getResult(),
+                uniqueDigit.getNumber(),
+                uniqueDigit.getK()
+            );
+        }).collect(Collectors.toList());
+        
     }
     
 }
