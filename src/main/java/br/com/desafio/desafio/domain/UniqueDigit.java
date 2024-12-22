@@ -10,12 +10,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "unique_digits")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class UniqueDigit {
 
     @Id
@@ -35,8 +37,16 @@ public class UniqueDigit {
     columnDefinition = "VARCHAR(36)")
     private User user;
 
+    @Column(name = "number", nullable = false, columnDefinition = "TEXT")
+    private String number;
+
+    @Column(name = "k", nullable = false, columnDefinition = "int")
+    private int k;
+
     public UniqueDigit(BigInteger number, Integer k) {
         this.result = this.calculateNewUniqueDigit(number, k);
+        this.number = String.valueOf(number);
+        this.k = k;
     }
 
     public int getResult() {
