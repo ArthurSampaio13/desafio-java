@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.desafio.controller.dto.CreateUserRequestDTO;
 import br.com.desafio.desafio.controller.dto.CreateUserResponseDTO;
+import br.com.desafio.desafio.controller.dto.GetCalcultarionsByUserIdResponseDTO;
 import br.com.desafio.desafio.controller.dto.GetUserByIDResponseDTO;
+import br.com.desafio.desafio.controller.dto.UniqueDigitDTO;
 import br.com.desafio.desafio.controller.dto.UpdateUserRequestDTO;
 import br.com.desafio.desafio.controller.dto.UserDTO;
 import br.com.desafio.desafio.domain.User;
@@ -13,6 +15,7 @@ import br.com.desafio.desafio.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -72,5 +75,14 @@ public class UserController {
         updateUserRequestDTO.email()
         );
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{userId}/calculations")
+    public ResponseEntity<GetCalcultarionsByUserIdResponseDTO> getCalculationsByUserId(
+        @PathVariable UUID userId) {
+        var listOfUniqueDigits = userService.getCalculationsByUserId(userId);
+        var uniqueDigitDTO = new UniqueDigitDTO(2, "9875", 1);
+        var response = new GetCalcultarionsByUserIdResponseDTO(List.of(uniqueDigitDTO));
+        return ResponseEntity.ok(response);
     }
 }
