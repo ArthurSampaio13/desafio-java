@@ -46,4 +46,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<UniqueDigit> uniqueDigits = new ArrayList<>();
+
+
+    public void addUniqueDigit(UniqueDigit uniqueDigit) {
+        uniqueDigit.setUser(this);
+        this.uniqueDigits.add(uniqueDigit);
+    }
 }
