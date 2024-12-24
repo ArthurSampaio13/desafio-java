@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.desafio.desafio.controller.dto.CreateUserRequestDTO;
+import br.com.desafio.desafio.controller.dto.UniqueDigitDTO;
 import br.com.desafio.desafio.controller.dto.UpdateUserRequestDTO;
 import br.com.desafio.desafio.controller.dto.UserDTO;
 import br.com.desafio.desafio.services.UserService;
@@ -93,6 +95,34 @@ public class UserControllerTest {
         // Then
         verify(this.userService, times(1))
         .updateUserByID(uuid, request.name(), request.email());
+    }
+
+
+    @Test
+    void itShouldAReturnAnListOfListOfUniqueDigitDTO() {
+        // Given
+        var uuid = UUID.randomUUID();
+
+        var result = List.of(
+            new UniqueDigitDTO(1, "9875", 1),
+            new UniqueDigitDTO(1, "9875", 1),
+            new UniqueDigitDTO(1, "9875", 1)
+        );
+
+        when(this.userService.getCalculationsByUserId(uuid))
+        .thenReturn(result);
+        // When
+        var response = this.userController.getCalculationsByUserId(uuid);
+        var body = response.getBody().uniqueDigits();
+        // Then
+        verify(this.userService, times(1))
+        .getCalculationsByUserId(uuid);
+
+        for(int i = 0; i < 3;  i++) {
+            assertEquals(body.get(i).result(), result.get(i).result());
+            assertEquals(body.get(i).number(), result.get(i).number());
+            assertEquals(body.get(i).k(), result.get(i).k());
+        }
     }
         
 }
