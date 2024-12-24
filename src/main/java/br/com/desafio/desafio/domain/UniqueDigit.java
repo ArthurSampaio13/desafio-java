@@ -25,7 +25,7 @@ public class UniqueDigit {
     nullable = false, 
     updatable = false, 
     columnDefinition = "VARCHAR(36)")
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "result", 
     nullable = false,
@@ -74,5 +74,9 @@ public class UniqueDigit {
         }
 
         return sum;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 } 
